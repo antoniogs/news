@@ -9,15 +9,19 @@
 <body>
     <h1>{% trans "News" %}</h1>
     {% for new in news %}
-        <h2>{{new.title}}</h2>
-        {{new.source.name}}, {{new.publishedAt}}<br />
-        {{new.description}}<br />
-        {% if new.urlToImage %}
-            <img src="{{new.urlToImage}}">
-        {% endif %}
-        {%if new.url%}
-        {% blocktrans with new_url=new.url%}For open the article page click <a href="{{new_url}}" target="_blank">here</a>.{% endblocktrans %}
-        {%endif%}
+        <div class="new_container">
+            <h2>{{new.title}}</h2>
+            <div class="source">{{new.source.name}}, {{new.publishedAt}}</div>
+            {{new.description}}<br />
+            {% if new.urlToImage %}
+                <img src="{{new.urlToImage}}">
+            {% endif %}
+            {%if new.url%}
+            <div class="new_link">
+            {% blocktrans with new_url=new.url%}For open the article page click <a href="{{new_url}}" target="_blank">here</a>.{% endblocktrans %}
+            </div>
+            {%endif%}
+        </div>
     {%endfor %}
 </body>
 </html>

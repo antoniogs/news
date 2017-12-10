@@ -1,10 +1,65 @@
-h2{
-    margin-top: 30px;
+body{
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 16px;
+}
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
 }
 
-img{
+.new_container{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #D3D3D3;
+    border-radius: 10px;
+}
+
+.new_container h2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size:18px;
+    text-decoration: underline;
+}
+@media screen and (max-width: 480px) {
+    .new_container h2{
+        font-size:15px;
+    }
+}
+
+.new_container .source{
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+@media screen and (max-width: 480px) {
+    .new_container .source{
+        font-size: 10px;
+    }
+}
+
+.new_container img{
     display: block;
-    max-width: 50%;
+    max-width: 70%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+@media screen and (max-width: 800px) {
+    .new_container img{
+        max-width: 80%;
+    }
+}
+
+.new_container .new_link {
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+@media screen and (max-width: 480px) {
+    .new_container .new_link {
+        font-size: 10px;
+    }
 }
