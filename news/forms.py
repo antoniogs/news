@@ -42,13 +42,18 @@ def get_valid_url_or_none(url):
     return None
 
 
+"""
+Function that replace some javascript special chars by an html char.
+Many chars can be replaced by a html equivalent, as the new-line char,
+but others, as explain the https://www.w3schools.com/js/js_strings.asp page,
+dont have a html sense.
+"""
 def js_to_html_replacements(string):
     _string = string
     _string = re.sub("\\r\\n", "<br />", _string)
     _string = re.sub("\\r", "<br />", _string)
     _string = re.sub("\\n", "<br />", _string)
     return _string
-
 
 
 class ArticleModelForm(forms.ModelForm):
@@ -63,12 +68,13 @@ class ArticleModelForm(forms.ModelForm):
     #         self.full_clean()
     #     return self._errors
     # Django is not checking the form errors
-    # because self._errors is an empty dict, not None.
+    # because self._errors is always an empty dict, not None.
     # So, let's override the errors method
     @property
     def errors(self):
         self.full_clean()
         return self._errors
+
 
     def clean_author(self):
         author = self.cleaned_data.get('author', None)
@@ -76,11 +82,13 @@ class ArticleModelForm(forms.ModelForm):
             return None
         return js_to_html_replacements(bleach.clean(author))
 
+
     def clean_title(self):
         title = self.cleaned_data.get('title', None)
         if title is None:
             return None
         return js_to_html_replacements(bleach.clean(title))
+
 
     def clean_description(self):
         description = self.cleaned_data.get('description', None)
@@ -93,6 +101,7 @@ class ArticleModelForm(forms.ModelForm):
                                                     ]
                                    )
         return js_to_html_replacements(description)
+
 
     def clean_urlToImage(self):
         urlToImage = self.cleaned_data.get('urlToImage',None)
@@ -113,6 +122,7 @@ class ArticleModelForm(forms.ModelForm):
             return urlToImage
         return None
 
+
     def clean_url(self):
         url = self.cleaned_data.get('url', None)
         if url is None:
@@ -129,11 +139,19 @@ class SourceModelForm(forms.ModelForm):
         model = Source
         fields = '__all__'
 
+
+    @property
+    def errors(self):
+        self.full_clean()
+        return self._errors
+
+
     def clean_name(self):
         name = self.cleaned_data.get('name', None)
         if name is None:
             return None
-        return bleach.clean(name)
+        return js_to_html_replacements(bleach.clean(name))
+
 
     def clean_newsapi_id(self):
         newsapi_id = self.cleaned_data.get('newsapi_id', None)

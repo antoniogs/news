@@ -23,6 +23,7 @@ class Article(models.Model):
                                   default= None )
     publishedAt = models.DateTimeField( _("published at"))
 
+
     def to_dict(self):
         dict = model_to_dict(
                     self,
@@ -42,8 +43,10 @@ class Article(models.Model):
 
         return dict
 
+
     def __str__(self):
         return self.title or ""
+
 
     """
     Get the newest publishedAt
@@ -85,8 +88,10 @@ class Source(models.Model):
     name = models.CharField(_("name"), max_length=255, blank=True,
                             null=True, default=None)
 
+
     def __str__(self):
         return self.name or ""
+
 
     def to_dict(self):
         dict = model_to_dict(
@@ -98,6 +103,7 @@ class Source(models.Model):
                 )
 
         return dict
+
 
     class Meta:
         verbose_name = _("source")
