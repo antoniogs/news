@@ -5,14 +5,13 @@ import pytz
 from dateutil.parser import parse
 
 from django.conf import settings
-from django.core.serializers import serialize
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView
 
 from news.models import Source, Article
 from news.forms import ArticleModelForm, SourceModelForm
+
 
 def save_article_and_source(newapi_article, last_published_at):
     publishedAt = newapi_article.pop("publishedAt",None)
