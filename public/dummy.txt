@@ -1,0 +1,2 @@
+The only purpose of this file is to add an empty folder (public)
+to Git.

@@ -1,0 +1,23 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "News" %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}">
+</head>
+<body>
+    <h1>{% trans "News" %}</h1>
+    {% for new in news %}
+        <h2>{{new.title}}</h2>
+        {{new.source.name}}, {{new.publishedAt}}<br />
+        {{new.description}}<br />
+        {% if new.urlToImage %}
+            <img src="{{new.urlToImage}}">
+        {% endif %}
+        {%if new.url%}
+        {% blocktrans with new_url=new.url%}For open the article page click <a href="{{new_url}}" target="_blank">here</a>.{% endblocktrans %}
+        {%endif%}
+    {%endfor %}
+</body>
+</html>
