@@ -37,4 +37,4 @@ Usage
 * /newslist
     Show a html view containing the 20 most recent articles.
 
-In the logs folder (/news/logs), the app saves in a log file information about the news that, by any cause, couldn't be processed.
+In the logs folder the app saves in a log file information about the news that, by any cause, couldn't be processed.
