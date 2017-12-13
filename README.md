@@ -36,3 +36,5 @@ Usage
     Get, in JSON format, the 100 most recent articles.
 * /newslist
     Show a html view containing the 20 most recent articles.
+
+In the logs folder (/news/logs), the app saves in a log file information about the news that, by any cause, couldn't be processed.

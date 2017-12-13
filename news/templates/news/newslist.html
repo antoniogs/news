@@ -12,7 +12,7 @@
         <div class="new_container">
             <h2>{{new.title}}</h2>
             <div class="source">{{new.source.name}}, {{new.publishedAt}}</div>
-            {{new.description}}<br />
+            {{new.description|linebreaksbr}}<br />
             {% if new.urlToImage %}
                 <img src="{{new.urlToImage}}">
             {% endif %}

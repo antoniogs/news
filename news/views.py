@@ -1,6 +1,8 @@
-import requests
+import copy
 import datetime
+import logging
 import pytz
+import requests
 
 from dateutil.parser import parse
 
@@ -12,18 +14,26 @@ from django.views.generic import ListView
 from news.models import Source, Article
 from news.forms import ArticleModelForm, SourceModelForm
 
+newslogger = logging.getLogger('newslogger')
+
 
 def save_article_and_source(newapi_article, last_published_at):
+    _newapi_article = copy.copy(newapi_article)
+
     publishedAt = newapi_article.pop("publishedAt",None)
-    if not publishedAt:
+    if publishedAt is None:
         return False
 
     publishedAt = parse(publishedAt)
     #There are newsapi articles with publishedAt='0001-01-01'
     if publishedAt <= parse(last_published_at):
+        log_msg = "New not saved due to date limit."
+        log_msg = "%s\n Date limit: %s." %(log_msg, last_published_at)
+        log_msg = "%s\n New: %s\n\n" %(log_msg, _newapi_article)
+        newslogger.warning(log_msg)
         return False
-    newapi_article['publishedAt'] = publishedAt
 
+    newapi_article['publishedAt'] = publishedAt
     source = None
     newapi_source = newapi_article.pop("source")
     newapi_source['newsapi_id'] = newapi_source.pop("id", None) \
@@ -34,11 +44,22 @@ def save_article_and_source(newapi_article, last_published_at):
         source, is_created = Source.objects.get_or_create(
                                     **source_modelform.cleaned_data)
         newapi_article['source'] = "%s" %(source.pk)
+    else:
+        log_msg = "New not saved due to source validation error."
+        log_msg = "%s\n New: %s" % (log_msg, _newapi_article)
+        log_msg = "%s\n Validation error: %s\n\n" % (log_msg, source_modelform.errors)
+        newslogger.warning(log_msg)
+        return False
 
     article_modelform = ArticleModelForm(newapi_article)
     if article_modelform.is_valid():
         article = article_modelform.save()
         return True
+    else:
+        log_msg = "New not saved due to new validation error."
+        log_msg = "%s\n New: %s" % (log_msg, _newapi_article)
+        log_msg = "%s\n Validation error: %s\n\n" % (log_msg, article_modelform.errors)
+        newslogger.warning(log_msg)
     return False
 
 

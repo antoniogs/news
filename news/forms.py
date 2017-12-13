@@ -43,16 +43,17 @@ def get_valid_url_or_none(url):
 
 
 """
-Function that replace some javascript special chars by an html char.
-Many chars can be replaced by a html equivalent, as the new-line char,
-but others, as explain the https://www.w3schools.com/js/js_strings.asp page,
+Function that replace some javascript special chars.
+Many chars, as explain the https://www.w3schools.com/js/js_strings.asp page,
 dont have a html sense.
 """
-def js_to_html_replacements(string):
-    _string = string
-    _string = re.sub("\\r\\n", "<br />", _string)
-    _string = re.sub("\\r", "<br />", _string)
-    _string = re.sub("\\n", "<br />", _string)
+def clear_js_chars(string):
+    _string = re.sub("\\b", "", string)
+    _string = re.sub("\\f", "\\n", _string) #replace new page by new line
+    _string = re.sub("\\r\\n", "\\n", string)
+    _string = re.sub("\\r", "\\n", _string)
+    _string = re.sub("\\t", "    ", _string) #replace tab by 4 spaces
+    _string = re.sub("\\v", "\\n", _string)  #replace vertical tab by new line
     return _string
 
 
@@ -80,14 +81,14 @@ class ArticleModelForm(forms.ModelForm):
         author = self.cleaned_data.get('author', None)
         if author is None:
             return None
-        return js_to_html_replacements(bleach.clean(author))
+        return clear_js_chars(bleach.clean(author))
 
 
     def clean_title(self):
         title = self.cleaned_data.get('title', None)
         if title is None:
             return None
-        return js_to_html_replacements(bleach.clean(title))
+        return clear_js_chars(bleach.clean(title))
 
 
     def clean_description(self):
@@ -100,7 +101,7 @@ class ArticleModelForm(forms.ModelForm):
                                                       'sup', 'u', 'wbr'
                                                     ]
                                    )
-        return js_to_html_replacements(description)
+        return clear_js_chars(description)
 
 
     def clean_urlToImage(self):
@@ -150,7 +151,7 @@ class SourceModelForm(forms.ModelForm):
         name = self.cleaned_data.get('name', None)
         if name is None:
             return None
-        return js_to_html_replacements(bleach.clean(name))
+        return clear_js_chars(bleach.clean(name))
 
 
     def clean_newsapi_id(self):

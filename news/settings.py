@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP_DIR  = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_DIR = os.path.join(BASE_DIR,'public')
-
+LOGS_DIR = os.path.join(BASE_DIR,'logs')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -137,5 +137,33 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(PUBLIC_DIR, 'static')
 STATIC_URL = '/static/'
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'basic': {
+            'format': '%(asctime)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'newslogfile': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'news.log'),
+            'level':'WARNING',
+            'maxBytes': 1024*1024 * 10,
+            'backupCount': 5,
+            'formatter': 'basic',
+        },
+
+    },
+    'loggers': {
+        'newslogger': {
+            'handlers': ['newslogfile'],
+            'level': 'WARNING',
+            'propagate': False,
+        }
+    }
+}
 
 NEWSAPI_KEY = "Write here your News API key"
